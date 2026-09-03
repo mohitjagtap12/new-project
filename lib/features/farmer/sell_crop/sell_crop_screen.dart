@@ -141,7 +141,7 @@ class _SellCropScreenState extends State<SellCropScreen> {
                         const Text('Unit', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: AgroColors.textDark)),
                         const SizedBox(height: 6),
                         DropdownButtonFormField<String>(
-                          value: _unit,
+                          initialValue: _unit,
                           items: ['kg', 'quintal', 'ton', 'crate'].map((u) {
                             return DropdownMenuItem(value: u, child: Text(u));
                           }).toList(),

@@ -40,6 +40,10 @@ class _FindLabourScreenState extends State<FindLabourScreen> {
   }
 
   void _showRequestDialog(LabourWorker worker) {
+    setState(() {
+      _selectedWork = worker.work;
+    });
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -71,8 +75,19 @@ class _FindLabourScreenState extends State<FindLabourScreen> {
               ],
             ),
             const SizedBox(height: 12),
-            Text('Work: ${worker.work} • Daily Wage: ₹${worker.dailyWage.toStringAsFixed(0)}'),
-            const SizedBox(height: 16),
+            Text('Daily Wage: ₹${worker.dailyWage.toStringAsFixed(0)}'),
+            const SizedBox(height: 12),
+            DropdownButtonFormField<String>(
+              initialValue: _selectedWork,
+              items: AppConstants.labourWorkTypes.map((w) => DropdownMenuItem(value: w, child: Text(w))).toList(),
+              onChanged: (val) {
+                if (val != null) {
+                  _selectedWork = val;
+                }
+              },
+              decoration: const InputDecoration(labelText: 'Work Type', prefixIcon: Icon(Icons.work_outline)),
+            ),
+            const SizedBox(height: 12),
             TextField(
               controller: _workersNeededController,
               keyboardType: TextInputType.number,
@@ -95,7 +110,7 @@ class _FindLabourScreenState extends State<FindLabourScreen> {
                 final req = LabourRequest(
                   id: 'lr_${DateTime.now().millisecondsSinceEpoch}',
                   workerName: worker.name,
-                  work: worker.work,
+                  work: _selectedWork,
                   date: _dateController.text.trim(),
                   workersNeeded: int.tryParse(_workersNeededController.text.trim()) ?? 1,
                   dailyWage: worker.dailyWage,

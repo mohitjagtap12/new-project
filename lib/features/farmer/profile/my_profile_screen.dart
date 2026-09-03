@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/app_utils.dart';
-import '../../../widgets/primary_button.dart';
 
 class MyProfileScreen extends StatefulWidget {
   final VoidCallback onOpenHelp;
@@ -76,20 +75,24 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Select Language'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: ['English', 'Marathi (मराठी)', 'Hindi (हिन्दी)'].map((lang) {
-            return RadioListTile<String>(
-              title: Text(lang),
-              value: lang.split(' ')[0],
-              groupValue: _selectedLanguage,
-              onChanged: (val) {
-                setState(() => _selectedLanguage = val ?? 'English');
-                Navigator.of(ctx).pop();
-                AppUtils.showSnackBar(context, 'Language set to $_selectedLanguage');
-              },
-            );
-          }).toList(),
+        content: RadioGroup<String>(
+          groupValue: _selectedLanguage,
+          onChanged: (val) {
+            if (val != null) {
+              setState(() => _selectedLanguage = val);
+              Navigator.of(ctx).pop();
+              AppUtils.showSnackBar(context, 'Language set to $_selectedLanguage');
+            }
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: ['English', 'Marathi (मराठी)', 'Hindi (हिन्दी)'].map((lang) {
+              return RadioListTile<String>(
+                title: Text(lang),
+                value: lang.split(' ')[0],
+              );
+            }).toList(),
+          ),
         ),
       ),
     );

@@ -41,7 +41,6 @@ class AgroTheme {
         primaryContainer: AgroColors.primaryContainer,
         onPrimaryContainer: AgroColors.primaryDark,
         secondary: AgroColors.secondary,
-        background: AgroColors.background,
         surface: AgroColors.surface,
         onSurface: AgroColors.textDark,
       ),
@@ -87,10 +86,10 @@ class AgroTheme {
           ),
         ),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: AgroColors.surface,
         elevation: 1,
-        shadowColor: Colors.black.withOpacity(0.06),
+        shadowColor: Colors.black.withValues(alpha: 0.06),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(14),
           side: const BorderSide(color: AgroColors.border, width: 1),

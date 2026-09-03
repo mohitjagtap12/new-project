@@ -114,7 +114,7 @@ class _CheckCropHealthScreenState extends State<CheckCropHealthScreen> {
             ),
             const SizedBox(height: 6),
             DropdownButtonFormField<String>(
-              value: _cropName,
+              initialValue: _cropName,
               items: ['Tomato', 'Wheat', 'Onion', 'Sugarcane', 'Maize'].map((c) {
                 return DropdownMenuItem(value: c, child: Text(c));
               }).toList(),
@@ -143,7 +143,7 @@ class _CheckCropHealthScreenState extends State<CheckCropHealthScreen> {
                             top: 8,
                             right: 8,
                             child: CircleAvatar(
-                              backgroundColor: Colors.black.withOpacity(0.6),
+                              backgroundColor: Colors.black.withValues(alpha: 0.6),
                               child: IconButton(
                                 icon: const Icon(Icons.close, color: Colors.white, size: 18),
                                 onPressed: () => setState(() => _selectedImage = null),

@@ -135,7 +135,7 @@ class _SellFarmWasteScreenState extends State<SellFarmWasteScreen> {
               const Text('Waste Type *', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: AgroColors.textDark)),
               const SizedBox(height: 6),
               DropdownButtonFormField<String>(
-                value: _selectedWasteType,
+                initialValue: _selectedWasteType,
                 items: AppConstants.wasteTypes.map((type) {
                   return DropdownMenuItem(value: type, child: Text(type));
                 }).toList(),
@@ -172,7 +172,7 @@ class _SellFarmWasteScreenState extends State<SellFarmWasteScreen> {
                         const Text('Unit', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: AgroColors.textDark)),
                         const SizedBox(height: 6),
                         DropdownButtonFormField<String>(
-                          value: _unit,
+                          initialValue: _unit,
                           items: ['kg', 'quintal', 'ton', 'bales'].map((u) {
                             return DropdownMenuItem(value: u, child: Text(u));
                           }).toList(),

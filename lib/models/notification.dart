@@ -14,4 +14,22 @@ class AgroNotification {
     required this.type,
     this.isRead = false,
   });
+
+  AgroNotification copyWith({
+    String? id,
+    String? title,
+    String? message,
+    String? time,
+    String? type,
+    bool? isRead,
+  }) {
+    return AgroNotification(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      message: message ?? this.message,
+      time: time ?? this.time,
+      type: type ?? this.type,
+      isRead: isRead ?? this.isRead,
+    );
+  }
 }

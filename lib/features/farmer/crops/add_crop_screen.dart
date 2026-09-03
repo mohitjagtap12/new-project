@@ -186,7 +186,7 @@ class _AddCropScreenState extends State<AddCropScreen> {
               const Text('Current Status', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: AgroColors.textDark)),
               const SizedBox(height: 6),
               DropdownButtonFormField<String>(
-                value: _selectedStatus,
+                initialValue: _selectedStatus,
                 items: ['Growing', 'Ready for Harvest', 'Harvested'].map((status) {
                   return DropdownMenuItem(value: status, child: Text(status));
                 }).toList(),
