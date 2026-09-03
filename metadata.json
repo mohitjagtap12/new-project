@@ -1,0 +1,6 @@
+{
+  "name": "AgroWorld - Farmer Module",
+  "description": "Integrated Agri-Commerce and Farm Services Platform - Complete Flutter Farmer Module for Android and Windows Desktop.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
