@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/app_utils.dart';
+import '../../auth/auth_service.dart';
+import '../../auth/login_screen.dart';
 
 class MyProfileScreen extends StatefulWidget {
   final VoidCallback onOpenHelp;
@@ -21,6 +23,19 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   String _farmSize = '5 Acres';
   String _mainCrops = 'Tomato, Wheat, Onion';
   String _selectedLanguage = 'English';
+
+  @override
+  void initState() {
+    super.initState();
+    final user = AuthService.instance.currentUser;
+    if (user != null) {
+      _name = user.name;
+      _phone = '+91 ${user.mobileNumber}';
+      _location = '${user.village}, ${user.district}';
+      _farmSize = user.farmSize;
+      _mainCrops = user.mainCrops;
+    }
+  }
 
   void _showEditProfileDialog() {
     final nameCtrl = TextEditingController(text: _name);
@@ -73,27 +88,61 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   void _showLanguageDialog() {
     showDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Select Language'),
-        content: RadioGroup<String>(
-          groupValue: _selectedLanguage,
-          onChanged: (val) {
-            if (val != null) {
-              setState(() => _selectedLanguage = val);
-              Navigator.of(ctx).pop();
-              AppUtils.showSnackBar(context, 'Language set to $_selectedLanguage');
-            }
-          },
-          child: Column(
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDialogState) => AlertDialog(
+          title: const Text('Select Language'),
+          content: Column(
             mainAxisSize: MainAxisSize.min,
             children: ['English', 'Marathi (मराठी)', 'Hindi (हिन्दी)'].map((lang) {
+              final val = lang.split(' ')[0];
               return RadioListTile<String>(
                 title: Text(lang),
-                value: lang.split(' ')[0],
+                value: val,
+                groupValue: _selectedLanguage,
+                onChanged: (newVal) {
+                  if (newVal != null) {
+                    setState(() => _selectedLanguage = newVal);
+                    setDialogState(() {});
+                    Navigator.of(ctx).pop();
+                    AppUtils.showSnackBar(context, 'Language set to $_selectedLanguage');
+                  }
+                },
               );
             }).toList(),
           ),
         ),
+      ),
+    );
+  }
+
+  void _showLogoutDialog() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Confirm Logout'),
+        content: const Text('Are you sure you want to log out of your AgroWorld farmer account?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text('Cancel', style: TextStyle(color: AgroColors.textMuted)),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.of(ctx).pop();
+              AuthService.instance.logout();
+              AppUtils.showSnackBar(context, 'Logged out successfully');
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (_) => const LoginScreen()),
+                (route) => false,
+              );
+            },
+            child: const Text('Logout'),
+          ),
+        ],
       ),
     );
   }
@@ -216,9 +265,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                   ListTile(
                     leading: const Icon(Icons.logout, color: Colors.red),
                     title: const Text('Logout', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
-                    onTap: () {
-                      AppUtils.showSnackBar(context, 'You are logged in as Demo Farmer');
-                    },
+                    onTap: _showLogoutDialog,
                   ),
                 ],
               ),

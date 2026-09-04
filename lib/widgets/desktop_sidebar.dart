@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../core/theme/app_theme.dart';
+import '../features/auth/auth_service.dart';
 
 class DesktopSidebarItem {
   final String title;
@@ -19,12 +20,14 @@ class DesktopSidebar extends StatelessWidget {
   final String selectedRoute;
   final ValueChanged<String> onSelectRoute;
   final int unreadNotifications;
+  final VoidCallback? onLogout;
 
   const DesktopSidebar({
     Key? key,
     required this.selectedRoute,
     required this.onSelectRoute,
     this.unreadNotifications = 2,
+    this.onLogout,
   }) : super(key: key);
 
   @override
@@ -32,8 +35,10 @@ class DesktopSidebar extends StatelessWidget {
     final List<DesktopSidebarItem> items = [
       DesktopSidebarItem(title: 'Home', icon: Icons.home, routeId: 'home'),
       DesktopSidebarItem(title: 'My Crops', icon: Icons.eco, routeId: 'crops'),
-      DesktopSidebarItem(title: 'Sell Crop', icon: Icons.sell, routeId: 'sell_crop'),
+      DesktopSidebarItem(title: 'Sell Crop', icon: Icons.add_business, routeId: 'sell_crop'),
+      DesktopSidebarItem(title: 'My Crop Sales', icon: Icons.storefront, routeId: 'my_crop_sales'),
       DesktopSidebarItem(title: 'Sell Farm Waste', icon: Icons.recycling, routeId: 'farm_waste'),
+      DesktopSidebarItem(title: 'Waste Market', icon: Icons.shopping_cart_outlined, routeId: 'waste_marketplace'),
       DesktopSidebarItem(title: 'Find Labour', icon: Icons.people, routeId: 'labour'),
       DesktopSidebarItem(title: 'Buy Products', icon: Icons.shopping_bag, routeId: 'products'),
       DesktopSidebarItem(title: 'Farm Contracts', icon: Icons.description, routeId: 'contracts'),
@@ -148,36 +153,56 @@ class DesktopSidebar extends StatelessWidget {
             ),
           ),
           // User mini footer card
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: const BoxDecoration(
-              border: Border(top: BorderSide(color: AgroColors.border, width: 1)),
-            ),
-            child: Row(
-              children: [
-                const CircleAvatar(
-                  radius: 18,
-                  backgroundColor: AgroColors.primaryContainer,
-                  child: Icon(Icons.person, color: AgroColors.primary, size: 22),
+          Builder(
+            builder: (context) {
+              final user = AuthService.instance.currentUser;
+              final userName = user?.name ?? 'Suresh Patil';
+              final userLocation = user != null
+                  ? '${user.village.isNotEmpty ? "${user.village}, " : ""}${user.district.isNotEmpty ? user.district : user.state}'
+                  : 'Pune, MH';
+
+              return Container(
+                padding: const EdgeInsets.all(12),
+                decoration: const BoxDecoration(
+                  border: Border(top: BorderSide(color: AgroColors.border, width: 1)),
                 ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        'Ramesh Patil',
-                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AgroColors.textDark),
+                child: Row(
+                  children: [
+                    const CircleAvatar(
+                      radius: 18,
+                      backgroundColor: AgroColors.primaryContainer,
+                      child: Icon(Icons.person, color: AgroColors.primary, size: 22),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            userName,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: AgroColors.textDark),
+                          ),
+                          Text(
+                            userLocation,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontSize: 11, color: AgroColors.textMuted),
+                          ),
+                        ],
                       ),
-                      Text(
-                        'Pune, MH',
-                        style: TextStyle(fontSize: 12, color: AgroColors.textMuted),
+                    ),
+                    if (onLogout != null)
+                      IconButton(
+                        icon: const Icon(Icons.logout, color: Colors.redAccent, size: 20),
+                        tooltip: 'Logout',
+                        onPressed: onLogout,
                       ),
-                    ],
-                  ),
+                  ],
                 ),
-              ],
-            ),
+              );
+            },
           ),
         ],
       ),

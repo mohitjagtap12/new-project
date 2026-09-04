@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'core/constants/app_routes.dart';
 import 'core/theme/app_theme.dart';
+import 'features/auth/login_screen.dart';
+import 'features/auth/register_screen.dart';
+import 'features/auth/splash_screen.dart';
 import 'features/farmer/farmer_shell.dart';
 
 void main() {
@@ -16,7 +20,14 @@ class AgroWorldFarmerApp extends StatelessWidget {
       title: 'AgroWorld',
       debugShowCheckedModeBanner: false,
       theme: AgroTheme.lightTheme,
-      home: const FarmerShell(),
+      initialRoute: AppRoutes.splash,
+      routes: {
+        AppRoutes.splash: (_) => const SplashScreen(),
+        AppRoutes.login: (_) => const LoginScreen(),
+        AppRoutes.register: (_) => const RegisterScreen(),
+        AppRoutes.farmerShell: (_) => const FarmerShell(),
+      },
     );
   }
 }
+

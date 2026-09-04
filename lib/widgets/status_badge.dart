@@ -17,6 +17,7 @@ class StatusBadge extends StatelessWidget {
 
     switch (status.toLowerCase()) {
       case 'growing':
+      case 'active':
       case 'available':
       case 'accepted':
       case 'completed':
@@ -29,6 +30,7 @@ class StatusBadge extends StatelessWidget {
       case 'on the way':
       case 'under review':
       case 'waiting':
+      case 'pending':
         bg = const Color(0xFFFFF3E0);
         fg = const Color(0xFFE65100);
         break;

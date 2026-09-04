@@ -26,24 +26,39 @@ class AppConstants {
   static const String titleMyProfile = 'My Profile';
   static const String titleHelp = 'Help';
 
-  // Waste Types
+  // Waste Types (Common agricultural residues)
   static const List<String> wasteTypes = [
-    'Wheat Straw',
-    'Rice Straw',
-    'Sugarcane Waste',
-    'Maize Stalks',
-    'Cotton Stalks',
-    'Coconut Shells',
-    'Other',
+    'Wheat Straw (गव्हाचा पेंढा)',
+    'Rice Straw (तांदळाचा पेंढा)',
+    'Sugarcane Trash (उसाची पाचट)',
+    'Maize Stalks (मक्याचे देठ)',
+    'Cotton Stalks (कापसाचे देठ)',
+    'Coconut Shell/Husk Waste (नारळाचे करवंटे/कचरा)',
+    'Other (इतर)',
+  ];
+
+  static const List<String> wasteUnits = [
+    'ton',
+    'quintal',
+    'kg',
+  ];
+
+  static const List<String> wastePriceUnits = [
+    '₹/ton',
+    '₹/quintal',
+    '₹/kg',
+    'Total ₹',
   ];
 
   // Work Types for Labour
   static const List<String> labourWorkTypes = [
     'Harvesting',
-    'Planting',
+    'Weeding',
     'Sowing',
     'Spraying',
-    'Weeding',
+    'Tractor/operator',
+    'Farm labour',
+    'Planting',
     'Other',
   ];
 
@@ -52,9 +67,11 @@ class AppConstants {
     'All',
     'Seeds',
     'Fertilizers',
-    'Crop Medicines',
-    'Tools',
-    'Farm Machines',
-    'Water Equipment',
+    'Organic inputs',
+    'Crop protection products',
+    'Farming tools',
+    'Irrigation items',
+    'Equipment/accessories',
+    'Other agricultural products',
   ];
 }

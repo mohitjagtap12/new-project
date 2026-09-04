@@ -179,69 +179,84 @@ class _MarketScreenState extends State<MarketScreen> {
               itemBuilder: (context, index) {
                 final item = filtered[index];
                 return Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Row(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.network(
-                            item['image'],
-                            width: 80,
-                            height: 80,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) => Container(
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(12),
+                    onTap: () {
+                      final t = item['type'];
+                      if (t == 'waste') {
+                        widget.onSelectWaste();
+                      } else if (t == 'contract') {
+                        widget.onSelectContracts();
+                      } else if (t == 'product') {
+                        widget.onSelectProducts();
+                      } else {
+                        widget.onSelectCrops();
+                      }
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Row(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
+                              item['image'],
                               width: 80,
                               height: 80,
-                              color: AgroColors.primaryContainer,
-                              child: const Icon(Icons.storefront, color: AgroColors.primary),
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) => Container(
+                                width: 80,
+                                height: 80,
+                                color: AgroColors.primaryContainer,
+                                child: const Icon(Icons.storefront, color: AgroColors.primary),
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 14),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                                decoration: BoxDecoration(
-                                  color: AgroColors.primaryContainer,
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                child: Text(
-                                  item['category'],
-                                  style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AgroColors.primaryDark),
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                item['title'],
-                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AgroColors.textDark),
-                              ),
-                              const SizedBox(height: 4),
-                              Row(
-                                children: [
-                                  Text(
-                                    item['price'],
-                                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AgroColors.primary),
+                          const SizedBox(width: 14),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    color: AgroColors.primaryContainer,
+                                    borderRadius: BorderRadius.circular(6),
                                   ),
-                                  const SizedBox(width: 8),
-                                  Text('•  Qty: ${item['qty']}', style: const TextStyle(fontSize: 13, color: AgroColors.textMuted)),
-                                ],
-                              ),
-                              const SizedBox(height: 4),
-                              Row(
-                                children: [
-                                  const Icon(Icons.location_on, size: 14, color: AgroColors.textLight),
-                                  const SizedBox(width: 4),
-                                  Text(item['location'], style: const TextStyle(fontSize: 12, color: AgroColors.textMuted)),
-                                ],
-                              ),
-                            ],
+                                  child: Text(
+                                    item['category'],
+                                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AgroColors.primaryDark),
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  item['title'],
+                                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AgroColors.textDark),
+                                ),
+                                const SizedBox(height: 4),
+                                Row(
+                                  children: [
+                                    Text(
+                                      item['price'],
+                                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AgroColors.primary),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text('•  Qty: ${item['qty']}', style: const TextStyle(fontSize: 13, color: AgroColors.textMuted)),
+                                  ],
+                                ),
+                                const SizedBox(height: 4),
+                                Row(
+                                  children: [
+                                    const Icon(Icons.location_on, size: 14, color: AgroColors.textLight),
+                                    const SizedBox(width: 4),
+                                    Text(item['location'], style: const TextStyle(fontSize: 12, color: AgroColors.textMuted)),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 );
