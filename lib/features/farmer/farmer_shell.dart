@@ -46,6 +46,7 @@ import 'orders/order_details_screen.dart';
 import 'products/buy_farm_products_screen.dart';
 import 'products/cart_screen.dart';
 import 'products/checkout_screen.dart';
+import 'products/order_confirmation_screen.dart';
 import 'products/product_details_screen.dart';
 import 'profile/my_profile_screen.dart';
 import 'sell_crop/crop_sale_details_screen.dart';
@@ -87,6 +88,7 @@ class _FarmerShellState extends State<FarmerShell> {
   FarmProduct? _selectedProduct;
   FarmContract? _selectedContract;
   AgroOrder? _selectedOrder;
+  AgroOrder? _confirmedOrder;
   FarmWaste? _selectedWaste;
   FarmWaste? _wasteToEdit;
   String _healthCropName = 'Tomato';
@@ -886,11 +888,19 @@ class _FarmerShellState extends State<FarmerShell> {
             setState(() {
               _cartItems.removeWhere((ci) => ci.product.id == item.product.id);
             });
+            AgroState.instance.removeFromCart(item.product.id);
           },
           onUpdateQuantity: (item, newQty) {
             setState(() {
               item.quantity = newQty;
             });
+            AgroState.instance.updateCartQuantity(item.product.id, newQty);
+          },
+          onClearCart: () {
+            setState(() {
+              _cartItems.clear();
+            });
+            AgroState.instance.clearCart();
           },
           onCheckout: () => _navigateTo('checkout'),
           onContinueShopping: () => _navigateTo('products'),
@@ -900,12 +910,31 @@ class _FarmerShellState extends State<FarmerShell> {
         return CheckoutScreen(
           cartItems: _cartItems,
           onOrderPlaced: (newOrder) {
+            AgroState.instance.addOrder(newOrder);
             setState(() {
               _orders.insert(0, newOrder);
               _cartItems.clear();
+              _selectedOrder = newOrder;
+              _confirmedOrder = newOrder;
             });
-            _navigateTo('orders');
+            _navigateTo('order_confirmation');
           },
+        );
+
+      case 'order_confirmation':
+        final confirmed = _confirmedOrder ?? (_orders.isNotEmpty ? _orders.first : null);
+        if (confirmed == null) {
+          return const Center(child: Text('No order placed'));
+        }
+        return OrderConfirmationScreen(
+          order: confirmed,
+          onViewOrder: (ord) {
+            setState(() => _selectedOrder = ord);
+            _navigateTo('order_details');
+          },
+          onViewMyOrders: () => _navigateTo('orders'),
+          onContinueShopping: () => _navigateTo('products'),
+          onReturnDashboard: () => _navigateTo('home'),
         );
 
       case 'contracts':

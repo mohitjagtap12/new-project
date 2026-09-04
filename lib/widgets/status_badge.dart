@@ -25,14 +25,23 @@ class StatusBadge extends StatelessWidget {
         bg = const Color(0xFFE8F5E9);
         fg = const Color(0xFF2E7D32);
         break;
+      case 'confirmed':
+        bg = const Color(0xFFE0F2F1);
+        fg = const Color(0xFF00695C);
+        break;
+      case 'processing':
       case 'ready for harvest':
       case 'working':
-      case 'on the way':
       case 'under review':
       case 'waiting':
       case 'pending':
         bg = const Color(0xFFFFF3E0);
         fg = const Color(0xFFE65100);
+        break;
+      case 'shipped':
+      case 'on the way':
+        bg = const Color(0xFFEDE7F6);
+        fg = const Color(0xFF512DA8);
         break;
       case 'placed':
       case 'requested':

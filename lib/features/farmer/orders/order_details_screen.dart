@@ -141,12 +141,55 @@ class OrderDetailsScreen extends StatelessWidget {
                 border: Border.all(color: AgroColors.border),
               ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _row('Quantity', order.quantity),
+                  if (order.items.isNotEmpty) ...[
+                    const Text('Ordered Products', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AgroColors.textDark)),
+                    const SizedBox(height: 10),
+                    ListView.separated(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: order.items.length,
+                      separatorBuilder: (context, index) => const Divider(height: 12, color: AgroColors.border),
+                      itemBuilder: (context, index) {
+                        final item = order.items[index];
+                        return Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(item.productName, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: AgroColors.textDark)),
+                                  Text('Qty: ${item.quantity} × ₹${item.price.toStringAsFixed(0)}', style: const TextStyle(fontSize: 12, color: AgroColors.textMuted)),
+                                ],
+                              ),
+                            ),
+                            Text('₹${item.total.toStringAsFixed(0)}', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AgroColors.primary)),
+                          ],
+                        );
+                      },
+                    ),
+                    const Divider(height: 20, color: AgroColors.border),
+                  ],
+                  _row('Total Quantity', order.quantity),
                   const SizedBox(height: 10),
                   _row(order.isBuying ? 'Seller' : 'Buyer', order.counterParty),
                   const SizedBox(height: 10),
+                  _row('Payment Mode', order.paymentMethod),
+                  const SizedBox(height: 10),
+                  if (order.customerName != null) ...[
+                    _row('Customer Name', order.customerName!),
+                    const SizedBox(height: 10),
+                  ],
+                  if (order.mobileNumber != null) ...[
+                    _row('Contact Phone', order.mobileNumber!),
+                    const SizedBox(height: 10),
+                  ],
                   _row('Delivery Address', order.address),
+                  if (order.deliveryNotes != null && order.deliveryNotes!.isNotEmpty) ...[
+                    const SizedBox(height: 10),
+                    _row('Delivery Note', order.deliveryNotes!),
+                  ],
                   const Divider(height: 24, color: AgroColors.border),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

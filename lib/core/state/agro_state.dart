@@ -196,28 +196,8 @@ class AgroState extends ChangeNotifier {
   }
 
   // Order Actions
-  AgroOrder placeOrder({
-    required String deliveryAddress,
-    required String paymentMethod,
-  }) {
-    final newOrder = AgroOrder(
-      id: 'ORD-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}',
-      items: _cartItems
-          .map((c) => OrderItem(
-                productName: c.product.name,
-                quantity: c.quantity,
-                price: c.product.price,
-                image: c.product.image,
-              ))
-          .toList(),
-      totalAmount: cartTotal,
-      status: 'Placed',
-      orderDate: DateTime.now().toString().substring(0, 10),
-      deliveryAddress: deliveryAddress,
-      paymentMethod: paymentMethod,
-    );
-
-    _orders.insert(0, newOrder);
+  void addOrder(AgroOrder order) {
+    _orders.insert(0, order);
     _cartItems.clear();
 
     // Add confirmation notification
@@ -226,7 +206,7 @@ class AgroState extends ChangeNotifier {
       AgroNotification(
         id: 'NOTIF-${DateTime.now().millisecondsSinceEpoch}',
         title: 'Order Placed Successfully',
-        message: 'Your order #${newOrder.id} of ₹${newOrder.totalAmount.toStringAsFixed(0)} has been placed.',
+        message: 'Your order #${order.orderNumber} of ${order.formattedTotal} has been placed.',
         time: 'Just now',
         type: 'Order',
         isRead: false,
@@ -234,6 +214,59 @@ class AgroState extends ChangeNotifier {
     );
 
     notifyListeners();
+  }
+
+  AgroOrder placeOrder({
+    required String deliveryAddress,
+    required String paymentMethod,
+    String? customerName,
+    String? mobileNumber,
+    String? village,
+    String? district,
+    String? state,
+    String? pincode,
+    String? deliveryNotes,
+    double? subtotal,
+    double? deliveryCharge,
+    double? discount,
+  }) {
+    final orderSubtotal = subtotal ?? cartTotal;
+    final orderDelivery = deliveryCharge ?? (cartItems.isEmpty ? 0.0 : 50.0);
+    final orderDiscount = discount ?? 0.0;
+    final orderTotal = orderSubtotal + orderDelivery - orderDiscount;
+
+    final newOrder = AgroOrder(
+      orderNumber: 'ORD-BUY-${1000 + DateTime.now().millisecond}',
+      items: _cartItems
+          .map((c) => OrderItem(
+                productName: c.product.name,
+                quantity: c.quantity,
+                price: c.product.price,
+                image: c.product.image,
+                priceUnit: c.product.priceUnit,
+                quantityUnit: c.product.quantityUnit,
+                sellerName: c.product.seller,
+              ))
+          .toList(),
+      price: orderTotal,
+      subtotal: orderSubtotal,
+      deliveryCharge: orderDelivery,
+      discount: orderDiscount,
+      status: 'Placed',
+      isBuying: true,
+      date: 'Today',
+      address: deliveryAddress,
+      customerName: customerName,
+      mobileNumber: mobileNumber,
+      village: village,
+      district: district,
+      state: state,
+      pincode: pincode,
+      deliveryNotes: deliveryNotes,
+      paymentMethod: paymentMethod,
+    );
+
+    addOrder(newOrder);
     return newOrder;
   }
 
